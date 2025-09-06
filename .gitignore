@@ -2,12 +2,8 @@ __pycache__/
 *.pyc
 orders.db
 .env
-backend/.env
-frontend/.env
-legacy/.env
 *.log
 .venv
-__pycache__
 node_modules/
 dist
 build

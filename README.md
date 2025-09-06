@@ -21,4 +21,4 @@ docker-compose up --build
 
 Будут подняты сервисы `api`, `postgres`, `qdrant` и опционально `redis`. API будет доступен по адресу [http://localhost:8000/docs](http://localhost:8000/docs).
 
-Старый прототип на Flask сохранён в `app/legacy_app.py`.
+Старый прототип на Flask сохранён в `legacy/legacy_app.py`.
