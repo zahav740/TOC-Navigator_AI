@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-import pytest
+import pytest_asyncio
 from httpx import AsyncClient
 
 TEST_DB = "test.db"
@@ -15,7 +15,7 @@ from app.main import app  # noqa: E402  (import after setting env)
 from app.database import Base, engine  # noqa: E402
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 async def client():
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
