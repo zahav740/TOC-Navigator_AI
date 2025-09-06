@@ -14,7 +14,6 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 from .config import settings
 
-
 # ---------------------------------------------------------------------------
 # Engine & Session configuration
 # ---------------------------------------------------------------------------
@@ -54,6 +53,7 @@ def get_db():
 # ---------------------------------------------------------------------------
 # Alembic helpers
 # ---------------------------------------------------------------------------
+
 
 def run_migrations() -> None:
     """Run Alembic migrations to ensure the database schema is up to date."""

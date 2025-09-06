@@ -23,10 +23,10 @@ docker compose up --build
 
 | Variable         | Description                            | Default                                   |
 |------------------|----------------------------------------|-------------------------------------------|
-| POSTGRES_USER    | PostgreSQL user                        | postgres                                  |
-| POSTGRES_PASSWORD| PostgreSQL password                    | postgres                                  |
-| POSTGRES_DB      | PostgreSQL database name               | postgres                                  |
-| DATABASE_URL     | SQLAlchemy connection string           | postgresql://postgres:postgres@db:5432/postgres |
+| POSTGRES_USER    | PostgreSQL user                        | toc_ai                                    |
+| POSTGRES_PASSWORD| PostgreSQL password                    | magarel                                   |
+| POSTGRES_DB      | PostgreSQL database name               | toc_ai                                    |
+| DATABASE_URL     | SQLAlchemy connection string           | postgresql://toc_ai:magarel@db:5432/toc_ai |
 | REDIS_URL        | Redis connection URL                   | redis://redis:6379/0                      |
 | QDRANT_URL       | Qdrant vector DB URL                   | http://qdrant:6333                        |
 
