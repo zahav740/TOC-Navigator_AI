@@ -5,14 +5,38 @@
 ## Требования
 
 - Python 3.11+
-- Запущенный PostgreSQL (по умолчанию используется `postgres:magarel1@localhost:5432/ai_base`)
+- Запущенный PostgreSQL
+
+## Конфигурация
+
+Скопируйте `.env.example` в `.env` и при необходимости измените значения:
+
+```
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+SECRET_KEY=changeme
+GEMINI_API_KEY=changeme
+```
+
+Для единичного запуска без `.env` установите переменную окружения `DATABASE_URL`.
+
+- **Unix**:
+  ```bash
+  export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+  ```
+- **PowerShell**:
+  ```powershell
+  $env:DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
+  ```
 
 ## Запуск
 
 ```bash
 pip install -r requirements.txt
-# при необходимости поменяйте строку подключения к БД
-export DATABASE_URL=postgresql://postgres:magarel1@localhost:5432/ai_base
 uvicorn app.main:app --reload
 ```
 
