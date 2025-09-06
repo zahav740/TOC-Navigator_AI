@@ -27,7 +27,7 @@ def test_import_excel_creates_orders_and_operators():
     buffer.seek(0)
 
     response = client.post(
-        "/import/excel",
+        "/orders/import-excel",
         files={
             "file": (
                 "orders.xlsx",
