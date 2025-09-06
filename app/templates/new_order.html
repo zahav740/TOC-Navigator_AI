@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><title>New Order</title></head>
+<body>
+<h1>New Order</h1>
+<form method="post">
+Client: <input type="text" name="client" /><br/>
+Date: <input type="date" name="date" /><br/>
+Status: <input type="text" name="status" /><br/>
+Manager: <input type="text" name="manager" /><br/>
+<input type="submit" value="Create" />
+</form>
+<a href="{{ url_for('list_orders') }}">Back</a>
+</body>
+</html>
