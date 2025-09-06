@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import date
 from pydantic import BaseModel
 
 
@@ -22,9 +23,13 @@ class Operator(OperatorBase):
 
 
 class OrderBase(BaseModel):
-    item: str
+    item: Optional[str] = None
     quantity: int = 1
     operator_id: Optional[int] = None
+    client: Optional[str] = None
+    date: Optional[date] = None
+    status: Optional[str] = None
+    manager: Optional[str] = None
 
 
 class OrderCreate(OrderBase):
@@ -35,6 +40,10 @@ class OrderUpdate(BaseModel):
     item: Optional[str] = None
     quantity: Optional[int] = None
     operator_id: Optional[int] = None
+    client: Optional[str] = None
+    date: Optional[date] = None
+    status: Optional[str] = None
+    manager: Optional[str] = None
 
 
 class Order(OrderBase):
