@@ -1,4 +1,3 @@
-Flask
 pandas
 openpyxl
 fastapi
@@ -7,4 +6,5 @@ sqlalchemy
 alembic
 psycopg2-binary
 python-multipart
-pytest
+python-dotenv
+redis

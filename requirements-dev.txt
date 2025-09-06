@@ -1,7 +1,6 @@
 -r requirements.txt
-pytest
-httpx
-pytest-asyncio
 pre-commit
 black
 ruff
+isort
+pytest
