@@ -1,6 +1,16 @@
 version: '3.9'
 services:
-  db:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - qdrant
+      # - redis  # uncomment if Redis is required
+  postgres:
     image: postgres:15
     restart: always
     environment:
@@ -18,24 +28,11 @@ services:
       - "6333:6333"
     volumes:
       - qdrant_data:/qdrant/storage
-  backend:
-    build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/code
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - qdrant
+  redis:
+    image: redis:7-alpine
+    restart: always
     ports:
-      - "8000:8000"
-  frontend:
-    build: ./frontend
-    depends_on:
-      - backend
-    ports:
-      - "3000:80"
+      - "6379:6379"
 volumes:
   postgres_data:
   qdrant_data:
