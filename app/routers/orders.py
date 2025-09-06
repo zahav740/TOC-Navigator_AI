@@ -1,5 +1,7 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+
+import pandas as pd
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
@@ -50,3 +52,32 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     db.delete(order)
     db.commit()
     return None
+
+
+@router.post("/import-excel", status_code=status.HTTP_201_CREATED)
+def import_orders(
+    file: UploadFile = File(...), db: Session = Depends(get_db)
+):
+    try:
+        df = pd.read_excel(file.file)
+    except Exception as exc:  # pragma: no cover - depends on pandas/openpyxl
+        raise HTTPException(status_code=400, detail="Invalid Excel file") from exc
+
+    required = {"item", "quantity"}
+    missing = required - set(df.columns)
+    if missing:
+        raise HTTPException(
+            status_code=400, detail=f"Missing columns: {', '.join(sorted(missing))}"
+        )
+
+    orders = [
+        models.Order(
+            item=row["item"],
+            quantity=int(row.get("quantity", 1)),
+            operator_id=row.get("operator_id"),
+        )
+        for _, row in df.iterrows()
+    ]
+    db.bulk_save_objects(orders)
+    db.commit()
+    return {"inserted": len(orders)}
