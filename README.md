@@ -13,12 +13,19 @@ uvicorn app.main:app --reload
 
 ## Запуск в Docker
 
-Сборка и запуск всех контейнеров:
+Для локального запуска доступны контейнеры приложения и баз данных.
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
-Будут подняты сервисы `api`, `postgres`, `qdrant` и опционально `redis`. API будет доступен по адресу [http://localhost:8000/docs](http://localhost:8000/docs).
+Эта команда использует `docker-compose.yml` и поднимает сервисы `api`, `postgres` и `qdrant`.
+При необходимости Redis можно включить с помощью профиля:
+
+```bash
+docker compose --profile redis up --build
+```
+
+После старта API будет доступен по адресу [http://localhost:8000/docs](http://localhost:8000/docs).
 
 Старый прототип на Flask сохранён в `legacy/legacy_app.py`.
