@@ -1,3 +1,8 @@
 Flask
 pandas
 openpyxl
+fastapi
+uvicorn
+sqlalchemy
+alembic
+psycopg2-binary
