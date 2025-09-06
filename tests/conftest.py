@@ -4,14 +4,15 @@ from pathlib import Path
 import json as jsonlib
 import uuid
 
+# Ensure project root is on PYTHONPATH before importing local plugins
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import pytest_asyncio
 
 pytest_plugins = ("pytest_asyncio",)
 
 TEST_DB = "test.db"
 
-# Ensure project root is on PYTHONPATH for `import app`
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB}"
 
 from app.main import app  # noqa: E402  (import after setting env)
