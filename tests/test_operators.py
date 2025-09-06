@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_create_operator(client):
     response = client.post("/operators/", json={"name": "Alice"})
     assert response.status_code == 201
