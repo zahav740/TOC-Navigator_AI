@@ -2,8 +2,8 @@ import os
 import sys
 from pathlib import Path
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
 
 TEST_DB = "test.db"
 
@@ -15,12 +15,13 @@ from app.main import app  # noqa: E402  (import after setting env)
 from app.database import Base, engine  # noqa: E402
 
 
-@pytest.fixture()
-def client():
+@pytest_asyncio.fixture()
+async def client():
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
     Base.metadata.create_all(bind=engine)
-    with TestClient(app) as client:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
     engine.dispose()
     if os.path.exists(TEST_DB):
