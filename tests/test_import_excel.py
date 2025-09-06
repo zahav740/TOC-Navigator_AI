@@ -1,9 +1,12 @@
 from io import BytesIO
 
 import pandas as pd
+import pytest
+
+pytestmark = pytest.mark.asyncio
 
 
-def test_import_excel_creates_orders(client):
+async def test_import_excel_creates_orders(client):
     df = pd.DataFrame(
         [
             {
@@ -24,7 +27,7 @@ def test_import_excel_creates_orders(client):
     df.to_excel(buffer, index=False)
     buffer.seek(0)
 
-    response = client.post(
+    response = await client.post(
         "/orders/import-excel",
         files={
             "file": (
@@ -39,19 +42,19 @@ def test_import_excel_creates_orders(client):
     assert body["created"] == 2
     assert body["errors"] == []
 
-    orders_resp = client.get("/orders")
+    orders_resp = await client.get("/orders")
     data = orders_resp.json()
     assert len(data) == 2
     assert {o["client"] for o in data} == {"ACME", "Globex"}
 
 
-def test_import_excel_missing_required_columns(client):
+async def test_import_excel_missing_required_columns(client):
     df = pd.DataFrame([{"client": "ACME"}])  # missing other required columns
     buffer = BytesIO()
     df.to_excel(buffer, index=False)
     buffer.seek(0)
 
-    response = client.post(
+    response = await client.post(
         "/orders/import-excel",
         files={
             "file": (
