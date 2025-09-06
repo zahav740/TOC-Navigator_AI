@@ -103,6 +103,12 @@ def import_orders_from_excel(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ):
+    """Import orders from an uploaded Excel file.
+
+    Each row is validated against ``OrderExcelRow`` and only valid rows
+    are persisted. Rows failing validation are returned in the ``errors``
+    list along with details about the failure.
+    """
     try:
         contents = file.file.read()
         df = pd.read_excel(BytesIO(contents))
