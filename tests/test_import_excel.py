@@ -3,11 +3,21 @@ from io import BytesIO
 import pandas as pd
 
 
-def test_import_excel_creates_orders_and_operators(client):
+def test_import_excel_creates_orders(client):
     df = pd.DataFrame(
         [
-            {"item": "Widget", "quantity": 2, "operator": "Alice"},
-            {"item": "Gadget", "quantity": 5, "operator": "Bob"},
+            {
+                "client": "ACME",
+                "date": "2023-01-01",
+                "status": "new",
+                "manager": "Alice",
+            },
+            {
+                "client": "Globex",
+                "date": "2023-01-02",
+                "status": "done",
+                "manager": "Bob",
+            },
         ]
     )
     buffer = BytesIO()
@@ -25,16 +35,18 @@ def test_import_excel_creates_orders_and_operators(client):
         },
     )
     assert response.status_code == 200
-    assert response.json()["created"] == 2
+    body = response.json()
+    assert body["created"] == 2
+    assert body["errors"] == []
 
     orders_resp = client.get("/orders")
     data = orders_resp.json()
     assert len(data) == 2
-    assert {o["operator"]["name"] for o in data} == {"Alice", "Bob"}
+    assert {o["client"] for o in data} == {"ACME", "Globex"}
 
 
 def test_import_excel_missing_required_columns(client):
-    df = pd.DataFrame([{"item": "Widget"}])  # missing quantity column
+    df = pd.DataFrame([{"client": "ACME"}])  # missing other required columns
     buffer = BytesIO()
     df.to_excel(buffer, index=False)
     buffer.seek(0)

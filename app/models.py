@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     String,
     ForeignKey,
+    Date,
 )
 from sqlalchemy.orm import relationship
 
@@ -22,8 +23,12 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
-    item = Column(String, nullable=False)
+    item = Column(String, nullable=True)
     quantity = Column(Integer, default=1)
     operator_id = Column(Integer, ForeignKey("operators.id"), nullable=True)
+    client = Column(String, nullable=True)
+    date = Column(Date, nullable=True)
+    status = Column(String, nullable=True)
+    manager = Column(String, nullable=True)
 
     operator = relationship("Operator", back_populates="orders")

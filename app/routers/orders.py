@@ -1,24 +1,32 @@
-from typing import List
+from typing import List, Set
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from io import BytesIO
-from typing import Set
 
 import pandas as pd
 from fastapi import File, UploadFile
+from pydantic import BaseModel, ValidationError
+from datetime import date
 
 from .. import models, schemas
 from ..database import get_db
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
-REQUIRED_COLUMNS: Set[str] = {"item", "quantity"}
+REQUIRED_COLUMNS: Set[str] = {"client", "date", "status", "manager"}
+
+
+class OrderExcelRow(BaseModel):
+    client: str
+    date: date
+    status: str
+    manager: str
 
 
 @router.post("/", response_model=schemas.Order, status_code=status.HTTP_201_CREATED)
 def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
-    if not order.item.strip():
+    if not order.item or not order.item.strip():
         raise HTTPException(status_code=400, detail="Item is required")
     if order.quantity <= 0:
         raise HTTPException(status_code=400, detail="Quantity must be positive")
@@ -58,8 +66,9 @@ def update_order(order_id: int, order: schemas.OrderUpdate, db: Session = Depend
         raise HTTPException(status_code=404, detail="Order not found")
 
     updates = order.dict(exclude_unset=True)
-    if "item" in updates and not updates["item"].strip():
-        raise HTTPException(status_code=400, detail="Item is required")
+    if "item" in updates:
+        if not updates["item"] or not updates["item"].strip():
+            raise HTTPException(status_code=400, detail="Item is required")
     if "quantity" in updates and updates["quantity"] is not None:
         if updates["quantity"] <= 0:
             raise HTTPException(status_code=400, detail="Quantity must be positive")
@@ -107,29 +116,23 @@ def import_orders_from_excel(
         )
 
     created = 0
-    for _, row in df.iterrows():
-        operator_id = None
-        operator_name = row.get("operator")
-        if isinstance(operator_name, str) and operator_name:
-            operator = (
-                db.query(models.Operator)
-                .filter(models.Operator.name == operator_name)
-                .first()
-            )
-            if operator is None:
-                operator = models.Operator(name=operator_name)
-                db.add(operator)
-                db.flush()
-            operator_id = operator.id
+    errors = []
+    for idx, row in df.iterrows():
+        try:
+            data = OrderExcelRow(**row.to_dict())
+        except ValidationError as e:  # pragma: no cover - depends on data
+            errors.append({"row": idx, "errors": e.errors()})
+            continue
 
         order = models.Order(
-            item=row["item"],
-            quantity=int(row["quantity"]) if not pd.isna(row["quantity"]) else 1,
-            operator_id=operator_id,
+            client=data.client,
+            date=data.date,
+            status=data.status,
+            manager=data.manager,
         )
         db.add(order)
         created += 1
 
     db.commit()
 
-    return {"created": created}
+    return {"created": created, "errors": errors}
