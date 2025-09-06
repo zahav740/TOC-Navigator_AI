@@ -2,10 +2,12 @@ import os
 import sqlite3
 from datetime import datetime
 from flask import Flask, request, redirect, url_for, render_template, flash
+from dotenv import load_dotenv
 import pandas as pd
 
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 app = Flask(__name__)
-app.secret_key = 'secret-key'
+app.secret_key = os.getenv("SECRET_KEY")
 DB_PATH = os.path.join(os.path.dirname(__file__), 'orders.db')
 
 
