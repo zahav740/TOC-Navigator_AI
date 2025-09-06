@@ -12,14 +12,14 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+from .config import settings
+
 
 # ---------------------------------------------------------------------------
 # Engine & Session configuration
 # ---------------------------------------------------------------------------
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
-)
+DATABASE_URL = settings.database_url
 
 if DATABASE_URL.startswith("sqlite"):
     # SQLite needs special arguments and doesn't really benefit from pooling.
