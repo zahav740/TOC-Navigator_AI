@@ -42,7 +42,7 @@ async def test_import_excel_creates_orders(client):
     assert body["created"] == 2
     assert body["errors"] == []
 
-    orders_resp = await client.get("/orders")
+    orders_resp = await client.get("/orders/")
     data = orders_resp.json()
     assert len(data) == 2
     assert {o["client"] for o in data} == {"ACME", "Globex"}
