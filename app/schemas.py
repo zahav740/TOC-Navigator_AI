@@ -52,3 +52,9 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class EventLog(BaseModel):
+    """Payload for logging an event related to an order."""
+
+    text: str
