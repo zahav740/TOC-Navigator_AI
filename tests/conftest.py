@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import pytest_asyncio
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 TEST_DB = "test.db"
 
@@ -20,7 +20,8 @@ async def client():
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
     Base.metadata.create_all(bind=engine)
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
     engine.dispose()
     if os.path.exists(TEST_DB):
