@@ -11,6 +11,7 @@ from datetime import date
 
 from .. import models, schemas
 from ..database import get_db
+from ..qdrant import log_event as log_event_to_qdrant
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -96,6 +97,19 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     db.delete(order)
     db.commit()
     return None
+
+
+@router.post("/{order_id}/log-event", status_code=status.HTTP_201_CREATED)
+def log_event(order_id: int, event: schemas.EventLog, db: Session = Depends(get_db)):
+    """Log a textual event for an order and store it in Qdrant."""
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
+    if order is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    try:
+        log_event_to_qdrant(order_id, event.text)
+    except Exception as exc:  # pragma: no cover - external service errors
+        raise HTTPException(status_code=500, detail=f"Failed to log event: {exc}")
+    return {"status": "logged"}
 
 
 @router.post("/import-excel")
