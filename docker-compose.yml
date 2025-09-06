@@ -9,7 +9,8 @@ services:
     depends_on:
       - postgres
       - qdrant
-      # - redis  # uncomment if Redis is required
+      # - redis  # enable when the redis profile is used
+    restart: unless-stopped
   postgres:
     image: postgres:15
     restart: always
@@ -33,6 +34,8 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    profiles:
+      - redis
 volumes:
   postgres_data:
   qdrant_data:
