@@ -11,8 +11,8 @@ TEST_DB = "test.db"
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB}"
 
-from app.main import app  # noqa: E402  (import after setting env)
 from app.database import Base, engine  # noqa: E402
+from app.main import app  # noqa: E402  (import after setting env)
 
 
 @pytest.fixture()

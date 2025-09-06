@@ -1,4 +1,3 @@
-
 def test_create_order(client):
     response = client.post("/orders/", json={"item": "Widget", "quantity": 3})
     assert response.status_code == 201
@@ -33,9 +32,7 @@ def test_update_order(client):
     created = client.post("/orders/", json={"item": "Widget", "quantity": 3}).json()
     order_id = created["id"]
 
-    response = client.put(
-        f"/orders/{order_id}", json={"item": "Gadget", "quantity": 5}
-    )
+    response = client.put(f"/orders/{order_id}", json={"item": "Gadget", "quantity": 5})
     assert response.status_code == 200
     data = response.json()
     assert data["item"] == "Gadget"
