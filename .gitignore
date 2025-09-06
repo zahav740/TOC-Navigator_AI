@@ -5,9 +5,10 @@ orders.db
 backend/.env
 frontend/.env
 legacy/.env
+*.log
 .venv
 __pycache__
-node_modules
+node_modules/
 dist
 build
 .DS_Store
