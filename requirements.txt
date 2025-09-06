@@ -6,6 +6,5 @@ sqlalchemy
 alembic
 psycopg2-binary
 python-multipart
-pydantic-settings
 python-dotenv
 redis
