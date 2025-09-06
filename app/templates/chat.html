@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<h1>Chat for Order {{ order_id }}</h1>
+<ul class="messages">
+{% for m in messages %}
+    <li>{{ m[0] }} <em>{{ m[1] }}</em></li>
+{% endfor %}
+</ul>
+<form method="post">
+    <input type="text" name="message" />
+    <input type="submit" value="Send" />
+</form>
+{% endblock %}

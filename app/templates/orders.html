@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<h1>Orders</h1>
+<table>
+<tr><th>ID</th><th>Client</th><th>Date</th><th>Status</th><th>Manager</th><th>Chat</th></tr>
+{% for o in orders %}
+<tr>
+    <td>{{ o[0] }}</td>
+    <td>{{ o[1] }}</td>
+    <td>{{ o[2] }}</td>
+    <td>{{ o[3] }}</td>
+    <td>{{ o[4] }}</td>
+    <td><a href="{{ url_for('order_chat', order_id=o[0]) }}">Chat</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

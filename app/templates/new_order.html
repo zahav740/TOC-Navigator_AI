@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}New Order{% endblock %}
+{% block content %}
+<h1>New Order</h1>
+<form method="post">
+    <label>Client</label>
+    <input type="text" name="client" />
+    <label>Date</label>
+    <input type="date" name="date" />
+    <label>Status</label>
+    <input type="text" name="status" />
+    <label>Manager</label>
+    <input type="text" name="manager" />
+    <input type="submit" value="Create" />
+</form>
+{% endblock %}
