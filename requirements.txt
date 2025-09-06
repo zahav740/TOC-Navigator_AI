@@ -7,4 +7,3 @@ alembic
 psycopg2-binary
 python-multipart
 pytest
-python-dotenv
