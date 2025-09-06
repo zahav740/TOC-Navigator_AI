@@ -1,12 +1,14 @@
 # TOC Navigator AI
 
-Простой прототип системы управления заказами.
+Простой прототип серверной части на FastAPI.
 
 ## Запуск
 
 ```bash
 pip install -r requirements.txt
-python app/app.py
+uvicorn app.main:app --reload
 ```
 
-Откройте [http://localhost:5000](http://localhost:5000) для просмотра списка заказов.
+Откройте [http://localhost:8000/docs](http://localhost:8000/docs) для просмотра API.
+
+Старый прототип на Flask сохранён в `app/legacy_app.py`.
