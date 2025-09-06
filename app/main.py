@@ -1,16 +1,14 @@
 from fastapi import FastAPI
 
-from .routers import orders, operators, import_excel
-from . import models
-from .database import engine
+from .routers import orders, operators
+from .database import init_db
 
-models.Base.metadata.create_all(bind=engine)
+init_db()
 
 app = FastAPI()
 
 app.include_router(orders.router)
 app.include_router(operators.router)
-app.include_router(import_excel.router)
 
 
 if __name__ == "__main__":
