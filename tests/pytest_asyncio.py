@@ -11,3 +11,7 @@ def pytest_pyfunc_call(pyfuncitem):  # pragma: no cover - test helper
         loop.close()
         return True
     return None
+
+
+def pytest_configure(config):  # pragma: no cover - test helper
+    config.addinivalue_line("markers", "asyncio: mark test as async")

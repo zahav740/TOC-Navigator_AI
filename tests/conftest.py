@@ -1,7 +1,7 @@
 import os
 import sys
 from pathlib import Path
-import json
+import json as jsonlib
 import uuid
 
 import pytest_asyncio
@@ -24,7 +24,7 @@ class Response:
         self._body = body
 
     def json(self):
-        return json.loads(self._body.decode())
+        return jsonlib.loads(self._body.decode())
 
 
 class AsyncClient:
@@ -64,7 +64,7 @@ class AsyncClient:
 
     async def post(self, path: str, json=None, files=None):
         if json is not None:
-            body = json.dumps(json).encode()
+            body = jsonlib.dumps(json).encode()
             headers = [(b"content-type", b"application/json")]
         elif files:
             field, (filename, fileobj, content_type) = next(iter(files.items()))
@@ -91,7 +91,7 @@ class AsyncClient:
         return await self._request("POST", path, body, headers)
 
     async def put(self, path: str, json=None):
-        body = json.dumps(json).encode() if json is not None else b""
+        body = jsonlib.dumps(json).encode() if json is not None else b""
         headers = [(b"content-type", b"application/json")] if json is not None else []
         return await self._request("PUT", path, body, headers)
 
@@ -100,12 +100,14 @@ class AsyncClient:
 
 
 @pytest_asyncio.fixture()
-async def client():
+def client():
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
     Base.metadata.create_all(bind=engine)
     client = AsyncClient(app)
-    yield client
-    engine.dispose()
-    if os.path.exists(TEST_DB):
-        os.remove(TEST_DB)
+    try:
+        yield client
+    finally:
+        engine.dispose()
+        if os.path.exists(TEST_DB):
+            os.remove(TEST_DB)
