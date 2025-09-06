@@ -1,12 +1,13 @@
-import os
 import sqlite3
 from datetime import datetime
 from flask import Flask, request, redirect, url_for, render_template, flash
 import pandas as pd
+from config import SECRET_KEY, DATABASE_URI, API_KEY
 
 app = Flask(__name__)
-app.secret_key = 'secret-key'
-DB_PATH = os.path.join(os.path.dirname(__file__), 'orders.db')
+app.secret_key = SECRET_KEY
+app.config['API_KEY'] = API_KEY
+DB_PATH = DATABASE_URI
 
 
 def init_db():
