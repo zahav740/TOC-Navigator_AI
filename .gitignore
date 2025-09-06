@@ -4,6 +4,7 @@ orders.db
 .env
 backend/.env
 frontend/.env
+legacy/.env
 .venv
 __pycache__
 node_modules
