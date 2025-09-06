@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from .routers import orders, operators
 from .database import init_db
+from .routers import operators, orders
 
 init_db()
 
