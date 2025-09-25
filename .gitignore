@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 orders.db
 .env
+.env.local
 *.log
 .venv
 node_modules/
